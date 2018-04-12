@@ -1,12 +1,17 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
+import javax.swing.JOptionPane;
+
 public class AnagramFinder {
-	static ArrayList<String> words = new ArrayList<String>(); 
+	static ArrayList<String> words = new ArrayList<String>();
+	ArrayList<String> anagrams = new ArrayList<String>();
 
 	public static void main(String[] args) {
+		AnagramFinder a = new AnagramFinder();
 		try {
 			Scanner scan = new Scanner(new File("dictionary.txt"));
 			while (scan.hasNext()) {
@@ -16,49 +21,34 @@ public class AnagramFinder {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		a.setUI();
 	}
 
-	ArrayList<String>anagramFinder(String a) {
-		boolean isAnagram = true;
-		
-		String finalAnagram = "";
-		
-		ArrayList<String> anagrams = new ArrayList<String>();
-		ArrayList<Character> anagram = new ArrayList<Character>();
-		ArrayList<Character> comparedWord = new ArrayList<Character>();
+	void setUI() {
+		String word = JOptionPane.showInputDialog("What word do you want to find anagrams of?");
 
-		for (int i = 0; i < a.length(); i++) {
-			anagram.add(a.charAt(i));
+		anagramFinder(word);
+
+		for (int i = 0; i < anagrams.size(); i++) {
+			String str = anagrams.get(i);
+			System.out.println(str);
 		}
-
-		for (String b : words) {
-			for (int j = 0; j < b.length(); j++) {
-				comparedWord.add(b.charAt(j));
-			}
-			if (comparedWord.size() == anagram.size()) {
-				for (int i = 0; i < anagram.size(); i++) {
-					for (int k = 0; k < comparedWord.size(); k++) {
-						if (anagram.get(i) == comparedWord.get(k)) {
-							comparedWord.set(k, '^');
-						}
-					}
-				}
-
-			}
-			for (Character c : comparedWord) {
-				if(c != '^') {
-					isAnagram = false;
-				}
-				if(isAnagram == true) {
-					for (int i = 0; i < comparedWord.size(); i++) {
-						finalAnagram+=comparedWord.get(i);
-						anagrams.add(finalAnagram);
-					}
-				}
-			}
-
-		}
-		return anagrams;
 	}
 
+	void anagramFinder(String a) {
+		char[] c1 = a.toCharArray();
+		Arrays.sort(c1);
+		String x = new String(c1);
+
+		for (String y : words) {
+			char[] c2 = y.toCharArray();
+			String z = y;
+			Arrays.sort(c2);
+			y = new String(c2);
+
+			if (x.equals(y)) {
+				anagrams.add(z);
+			}
+		}
+	}
 }
